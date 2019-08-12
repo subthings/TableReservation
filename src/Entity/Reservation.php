@@ -17,6 +17,11 @@ class Reservation
     private $id;
 
     /**
+     * ORM\ManyToOne(targetEntity="Dish")
+     */
+    private $dish;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $quanity;

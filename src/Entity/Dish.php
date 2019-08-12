@@ -27,7 +27,8 @@ class Dish
     private $price;
 
     /**
-     * @var
+     * @ORM\OneToMany(targetEntity="Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
 
@@ -58,5 +59,17 @@ class Dish
         $this->price = $price;
 
         return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(Category $category): self
+    {
+        $this->category = $category;
+
+        return  $this;
     }
 }

@@ -21,6 +21,12 @@ class Category
      */
     private $name;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Dish"), cascade={ "persist" , "remove" }, inversedBy="category")
+     * @ORM\JoinColumn(name="dish_id", referencedColumnName="id")
+     */
+    private $dish;
+
     public function getId(): ?int
     {
         return $this->id;
