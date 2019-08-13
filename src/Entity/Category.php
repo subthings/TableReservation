@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,10 +24,14 @@ class Category
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Dish"), cascade={ "persist" , "remove" }, inversedBy="category")
-     * @ORM\JoinColumn(name="dish_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="Dish", mappedBy="category", orphanRemoval=true)
      */
-    private $dish;
+    private $dishes;
+
+    public function __construct()
+    {
+        $this->dishes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -43,4 +49,36 @@ class Category
 
         return $this;
     }
+
+    /**
+     * @return Collection|Dish[]
+     */
+    public function getDishes(): Collection
+    {
+        return $this->dishes;
+    }
+
+    public function addProduct(Dish $dish): self
+    {
+        if (!$this->dishes->contains($dish)) {
+            $this->dishes[] = $dish;
+            $dish->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Dish $dish): self
+    {
+        if ($this->dishes->contains($dish)) {
+            $this->dishes->removeElement($dish);
+            // set the owning side to null (unless already changed)
+            if ($dish->getCategory() === $this) {
+                $dish->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

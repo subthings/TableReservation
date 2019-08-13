@@ -17,7 +17,7 @@ class Reservation
     private $id;
 
     /**
-     * ORM\ManyToOne(targetEntity="Dish")
+     * ORM\OneToMany(targetEntity="Dish")
      */
     private $dish;
 
