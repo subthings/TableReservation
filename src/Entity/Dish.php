@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DishRepository")
@@ -20,6 +21,7 @@ class Dish
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Unique
      */
     private $name;
 

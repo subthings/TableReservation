@@ -7,6 +7,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BillRepository")
@@ -32,6 +33,7 @@ class Bill
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $date;
 
