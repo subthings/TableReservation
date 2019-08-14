@@ -1,4 +1,5 @@
 <?php
+// src/Controller/FrontController.php
 declare(strict_types=1);
 
 namespace App\Controller;

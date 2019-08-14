@@ -1,4 +1,6 @@
 <?php
+// src/Entity/Category.php
+declare(strict_types=1);
 
 namespace App\Entity;
 
