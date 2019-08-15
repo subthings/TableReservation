@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\IdentityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -12,16 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Dish
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use IdentityTrait;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Unique
      */
     private $name;
 
@@ -36,9 +31,9 @@ class Dish
      */
     private $category;
 
-    public function getId(): ?int
+    public function __toString()
     {
-        return $this->id;
+        return $this->name;
     }
 
     public function getName(): ?string

@@ -19,10 +19,21 @@ class DishRepository extends ServiceEntityRepository
         parent::__construct($registry, Dish::class);
     }
 
-    public function showByCategories(){
-        return $this->createQueryBuilder('d')
-            ->groupBy('d.category');
+    /**
+     * @return Dish[]
+     */
 
+    public function showByCategories():array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT d
+        FROM App\Entity\Dish d
+        GROUP BY d.category
+        ORDER BY d.name ASC ');
+
+        return $query->execute();
 
     }
     // /**

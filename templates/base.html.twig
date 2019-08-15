@@ -21,7 +21,7 @@
             <ul class="navbar-nav mr-auto">
                 {% for category in categories %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">{{ category }}</a>
+                    <a class="nav-link" href="{{ path('categoryMenu', { id: category.id }) }}">{{ category }}</a>
                 </li>
                 {% endfor %}
             </ul>

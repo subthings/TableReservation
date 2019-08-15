@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\IdentityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,28 +16,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Order
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use IdentityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="App\Entity\Cart")
      */
-    private $user;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Dish")
-     */
-    private $dish;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $quanity;
+    private $cart;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -60,62 +45,19 @@ class Order
      */
     private $table;
 
-    public function __construct()
-    {
-        $this->dish = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getUser(): ?User
     {
-        return $this->user;
+        return $this->cart->user;
     }
 
-    public function setUser(?User $user): self
+    public function getCart(): Cart
     {
-        $this->user = $user;
-
-        return $this;
+        return $this->cart;
     }
 
-    /**
-     * @return Collection|Dish[]
-     */
-    public function getDish(): Collection
+    public function addCart(Cart $cart): self
     {
-        return $this->dish;
-    }
-
-    public function addDish(Dish $dish): self
-    {
-        if (!$this->dish->contains($dish)) {
-            $this->dish[] = $dish;
-        }
-
-        return $this;
-    }
-
-    public function removeDish(Dish $dish): self
-    {
-        if ($this->dish->contains($dish)) {
-            $this->dish->removeElement($dish);
-        }
-
-        return $this;
-    }
-
-    public function getQuanity(): ?int
-    {
-        return $this->quanity;
-    }
-
-    public function setQuanity(int $quanity): self
-    {
-        $this->quanity = $quanity;
+        $this->cart = $cart;
 
         return $this;
     }

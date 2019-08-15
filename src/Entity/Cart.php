@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\IdentityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,38 +15,22 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Cart
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use IdentityTrait;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="cart", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="orders")
      * @ORM\JoinColumn(nullable=false)
-     * @Assert\Unique
      */
     private $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Dish")
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderRow", mappedBy="cart")
      */
-    private $dish;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $quanity;
+    private $orderRows;
 
     public function __construct()
     {
-        $this->dish = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
+        $this->orderRows = new ArrayCollection();
     }
 
     public function getUser(): ?User
@@ -60,41 +45,27 @@ class Cart
         return $this;
     }
 
-    /**
-     * @return Collection|Dish[]
-     */
-    public function getDish(): Collection
+
+    public function getOrderRows(): Collection
     {
-        return $this->dish;
+        return $this->orderRows;
     }
 
-    public function addDish(Dish $dish): self
+    public function addOrderRows(OrderRow $orderRow): self
     {
-        if (!$this->dish->contains($dish)) {
-            $this->dish[] = $dish;
+        if (!$this->orderRows->contains($orderRow)) {
+            $this->orderRows[] = $orderRow;
         }
 
         return $this;
     }
 
-    public function removeDish(Dish $dish): self
+    public function removeOrderRows(Dish $orderRow): self
     {
-        if ($this->dish->contains($dish)) {
-            $this->dish->removeElement($dish);
+        if ($this->orderRows->contains($orderRow)) {
+            $this->orderRows->removeElement($orderRow);
         }
-
         return $this;
     }
 
-    public function getQuanity(): ?int
-    {
-        return $this->quanity;
-    }
-
-    public function setQuanity(int $quanity): self
-    {
-        $this->quanity = $quanity;
-
-        return $this;
-    }
 }

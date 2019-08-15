@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category }} Menu{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <h1>{{category}} Menu ✅</h1>
+        <ul>
+            {% for dish in dishes %}
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ dish.name }}</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ dish.price }}</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="{{ path('addToCart', { id: dish.id }) }}" class="card-link">Add</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+{% endblock %}

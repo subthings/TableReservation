@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\IdentityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,12 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Category
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use IdentityTrait;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -42,10 +38,6 @@ class Category
         return $this->name;
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getName(): ?string
     {
@@ -67,7 +59,7 @@ class Category
         return $this->dishes;
     }
 
-    public function addProduct(Dish $dish): self
+    public function addDish(Dish $dish): self
     {
         if (!$this->dishes->contains($dish)) {
             $this->dishes[] = $dish;
@@ -77,7 +69,7 @@ class Category
         return $this;
     }
 
-    public function removeProduct(Dish $dish): self
+    public function removeDish(Dish $dish): self
     {
         if ($this->dishes->contains($dish)) {
             $this->dishes->removeElement($dish);
