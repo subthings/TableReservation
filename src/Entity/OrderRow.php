@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -26,6 +27,16 @@ class OrderRow
      * @ORM\Column(type="integer")
      */
     private $quanity;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Cart", inversedBy="orderRows")
+     */
+    private $cart;
+
+    public function __toString()
+    {
+        return (string)$this->id;
+    }
 
     public function getId(): ?int
     {

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190815100304 extends AbstractMigration
+final class Version20190816051848 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -41,8 +41,8 @@ final class Version20190815100304 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE cart_dish (cart_id INT NOT NULL, dish_id INT NOT NULL, INDEX IDX_7A988C81148EB0CB (dish_id), INDEX IDX_7A988C811AD5CDBF (cart_id), PRIMARY KEY(cart_id, dish_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB COMMENT = \'\' ');
-        $this->addSql('CREATE TABLE order_dish (order_id INT NOT NULL, dish_id INT NOT NULL, INDEX IDX_D88CB6AF148EB0CB (dish_id), INDEX IDX_D88CB6AF8D9F6D38 (order_id), PRIMARY KEY(order_id, dish_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB COMMENT = \'\' ');
+        $this->addSql('CREATE TABLE cart_dish (cart_id INT NOT NULL, dish_id INT NOT NULL, INDEX IDX_7A988C811AD5CDBF (cart_id), INDEX IDX_7A988C81148EB0CB (dish_id), PRIMARY KEY(cart_id, dish_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB COMMENT = \'\' ');
+        $this->addSql('CREATE TABLE order_dish (order_id INT NOT NULL, dish_id INT NOT NULL, INDEX IDX_D88CB6AF8D9F6D38 (order_id), INDEX IDX_D88CB6AF148EB0CB (dish_id), PRIMARY KEY(order_id, dish_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB COMMENT = \'\' ');
         $this->addSql('ALTER TABLE cart_dish ADD CONSTRAINT FK_7A988C81148EB0CB FOREIGN KEY (dish_id) REFERENCES dish (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cart_dish ADD CONSTRAINT FK_7A988C811AD5CDBF FOREIGN KEY (cart_id) REFERENCES cart (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE order_dish ADD CONSTRAINT FK_D88CB6AF148EB0CB FOREIGN KEY (dish_id) REFERENCES dish (id) ON DELETE CASCADE');
