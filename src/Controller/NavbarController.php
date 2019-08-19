@@ -21,7 +21,6 @@ class NavbarController extends AbstractController
         return $this->render('navbar/index.html.twig', [
             'controller_name' => 'NavbarController',
             'categories' => $categories,
-            'dishes' => $dishes,
             'user' => $user,
         ]);
     }

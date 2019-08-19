@@ -29,13 +29,13 @@ class OrderRow
     private $quanity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Cart", inversedBy="orderRows")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Cart", inversedBy="orderRows",cascade={"persist"})
      */
     private $cart;
 
     public function __toString()
     {
-        return (string)$this->id;
+        return "$this->id $this->dish $this->quanity";
     }
 
     public function getId(): ?int
@@ -66,4 +66,16 @@ class OrderRow
 
         return $this;
     }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(Cart $cart): self
+    {
+        $this->cart = $cart;
+        return $this;
+    }
+
 }

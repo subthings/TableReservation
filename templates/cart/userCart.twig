@@ -3,9 +3,14 @@
 {% block title %}Hello CartController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-</div>
+{% for orderRow in cart.OrderRows %}
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">{{ orderRow.dish }}</h4>
+            <h6 class="card-subtitle mb-2 text-muted">{{ orderRow.quanity }}</h6>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="{{ path('addToCart', { id: dish.id }) }}" class="card-link">Add</a>
+        </div>
+    </div>
+    {% endfor %}
 {% endblock %}

@@ -23,9 +23,14 @@ class Cart
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderRow", mappedBy="cart")
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderRow", mappedBy="cart", cascade={"remove"})
      */
     private $orderRows;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isOrdered = 0;
 
     public function __construct()
     {
@@ -44,26 +49,45 @@ class Cart
         return $this;
     }
 
-
+    /**
+     * @return Collection|OrderRow[]
+     */
     public function getOrderRows(): Collection
     {
         return $this->orderRows;
     }
 
-    public function addOrderRows(OrderRow $orderRow): self
+    public function addOrderRow(OrderRow $orderRow): self
     {
         if (!$this->orderRows->contains($orderRow)) {
             $this->orderRows[] = $orderRow;
+            $orderRow->setCart($this);
         }
 
         return $this;
     }
 
-    public function removeOrderRows(OrderRow $orderRow): self
+    public function removeOrderRow(OrderRow $orderRow): self
     {
         if ($this->orderRows->contains($orderRow)) {
             $this->orderRows->removeElement($orderRow);
+
+            if ($orderRow->getCart() === $this){
+                $orderRow->setCart(null);
+            }
         }
+
+        return $this;
+    }
+
+    public function getIsOrdered(): ?bool
+    {
+        return $this->isOrdered;
+    }
+
+    public function setIsOrdered(bool $isOrdered): self
+    {
+        $this->isOrdered = $isOrdered;
         return $this;
     }
 

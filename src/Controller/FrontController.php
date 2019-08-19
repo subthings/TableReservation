@@ -17,12 +17,11 @@ class FrontController extends AbstractController
      */
     public function index():Response
     {
-        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
         $dishes = $this->getDoctrine()->getRepository(Dish::class)->findAll();
-        $user = $this->get('security.token_storage')->getToken()->getUser();
 
         return $this->render('front/index.html.twig', [
             'controller_name' => 'FrontController',
+            'dishes' => $dishes,
         ]);
     }
 
