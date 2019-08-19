@@ -29,21 +29,17 @@ class Order
     private $payed;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @Assert\GreaterThanOrEqual("today")
-     */
-    private $date;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bill", inversedBy="orders")
      */
     private $bill;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Table")
-     * @ORM\Column(name="picked_table")
+     * @ORM\ManyToOne(targetEntity="App\Entity\TableReservation", inversedBy="orders")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $table;
+    private $tableReservation;
+
+
 
     public function getUser(): ?User
     {
@@ -74,18 +70,6 @@ class Order
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
     public function getBill(): ?Bill
     {
         return $this->bill;
@@ -98,14 +82,16 @@ class Order
         return $this;
     }
 
-    public function getTable(): ?Table
+    public function getTableReservation(): ?TableReservation
     {
-        return $this->table;
+        return $this->tableReservation;
     }
 
-    public function setTable(?Table $table): self
+    public function setTableReservation(?TableReservation $tableReservation): self
     {
-        $this->table =  $table;
+        $this->tableReservation = $tableReservation;
+
         return $this;
     }
+
 }

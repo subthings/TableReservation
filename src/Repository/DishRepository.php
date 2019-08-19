@@ -22,18 +22,14 @@ class DishRepository extends ServiceEntityRepository
     /**
      * @return Dish[]
      */
-
     public function showByCategories():array
     {
-        $entityManager = $this->getEntityManager();
+        $qb = $this->createQueryBuilder('d')
+            ->addGroupBy('d.category')
+            ->getQuery();
 
-        $query = $entityManager->createQuery(
-            'SELECT d
-        FROM App\Entity\Dish d
-        GROUP BY d.category
-        ORDER BY d.name ASC ');
 
-        return $query->execute();
+        return $qb->execute();
 
     }
     // /**

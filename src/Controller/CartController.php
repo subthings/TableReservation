@@ -9,7 +9,9 @@ use App\Entity\Order;
 use App\Entity\OrderRow;
 use App\Entity\User;
 use App\Form\OrderRowType;
+use App\Form\OrderType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,7 +57,7 @@ class CartController extends AbstractController
             $entityManager->persist($cart);
             $entityManager->flush();
 
-                return $this->redirectToRoute('index');
+            return $this->redirectToRoute('index');
         }
 
         return $this->render('cart/addRow.html.twig', [
@@ -66,7 +68,7 @@ class CartController extends AbstractController
     /**
      * @Route("/showCart/{id}", name="showCart")
      */
-    public function showCart($id)
+    public function showCart($id): Response
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $cart = $this->getDoctrine()->getRepository(Cart::class)->findOneBy([
@@ -77,7 +79,7 @@ class CartController extends AbstractController
         $orderRows = $cart->getOrderRows();
         $totalSum = 0;
         foreach ($orderRows as $orderRow){
-            $totalSum += $orderRow->getDish()->getPrice();
+            $totalSum += $orderRow->getDish()->getPrice() * $orderRow->getQuanity();
         }
         return $this->render('cart/userCart.html.twig', [
             'cart' => $cart,
@@ -89,13 +91,24 @@ class CartController extends AbstractController
     /**
      * @Route("/order/{id}", name="order")
     */
-    public function makeOrder($id)
+    public function makeOrder(Request $request, $id): Response
     {
         $cart= $this->getDoctrine()->getRepository(Cart::class)->find($id);
         $cart->setIsOrdered(true);
         $order = new Order();
         $order->setCart($cart);
-        return $this->render('cart/order.html.twig');
+        $form = $this->createForm(OrderType::class, $order);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($order);
+            $entityManager->flush();
+            return $this->redirectToRoute('index');
+        }
+
+        return $this->render('cart/order.html.twig', [
+            'form'=>$form->createView(),
+        ]);
     }
 
 }
