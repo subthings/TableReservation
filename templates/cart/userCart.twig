@@ -3,13 +3,12 @@
 {% block title %}Hello CartController!{% endblock %}
 
 {% block body %}
-{% for orderRow in cart.OrderRows %}
+{% for orderRow in orderRows %}
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">{{ orderRow.dish }}</h4>
             <h6 class="card-subtitle mb-2 text-muted">{{ orderRow.quanity }}</h6>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="{{ path('addToCart', { id: dish.id }) }}" class="card-link">Add</a>
         </div>
     </div>
     {% endfor %}

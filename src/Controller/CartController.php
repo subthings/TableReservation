@@ -68,11 +68,14 @@ class CartController extends AbstractController
     public function showCart($id)
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
-        $cart = $this->getDoctrine()->getRepository(Cart::class)->findBy([
+        $cart = $this->getDoctrine()->getRepository(Cart::class)->findOneBy([
             'user' => $user,
+            'isOrdered' => 0,
         ]);
+        $orderRows = $cart->getOrderRows();
         return $this->render('cart/userCart.twig', [
             'cart' => $cart,
+            'orderRows' => $orderRows,
         ]);
     }
 }
