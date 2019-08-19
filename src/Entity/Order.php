@@ -55,7 +55,7 @@ class Order
         return $this->cart;
     }
 
-    public function addCart(Cart $cart): self
+    public function setCart(Cart $cart): self
     {
         $this->cart = $cart;
 

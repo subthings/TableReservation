@@ -3,7 +3,9 @@
 {% block title %}Hello CartController!{% endblock %}
 
 {% block body %}
+    <h1>Your cart</h1>
 {% for orderRow in orderRows %}
+
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">{{ orderRow.dish }}</h4>
@@ -12,4 +14,6 @@
         </div>
     </div>
     {% endfor %}
+    <h4>Total price: {{ totalSum }}</h4>
+    <a type="submit" class="btn btn-warning" href="{{ path('order', { id: cart.id }) }}">Order</a>
 {% endblock %}

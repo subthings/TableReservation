@@ -14,7 +14,9 @@
     {{ render(controller(
         'App\\Controller\\NavbarController::navbarShow'
     )) }}
+    <div class="jumbotron">
         {% block body %}{% endblock %}
+    </div>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

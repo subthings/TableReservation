@@ -30,7 +30,7 @@ class Cart
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isOrdered = 0;
+    private $isOrdered = false;
 
     public function __construct()
     {

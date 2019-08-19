@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Cart;
 use App\Entity\Dish;
+use App\Entity\Order;
 use App\Entity\OrderRow;
 use App\Entity\User;
 use App\Form\OrderRowType;
@@ -70,12 +71,31 @@ class CartController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $cart = $this->getDoctrine()->getRepository(Cart::class)->findOneBy([
             'user' => $user,
-            'isOrdered' => 0,
+            'isOrdered' => false,
         ]);
+
         $orderRows = $cart->getOrderRows();
-        return $this->render('cart/userCart.twig', [
+        $totalSum = 0;
+        foreach ($orderRows as $orderRow){
+            $totalSum += $orderRow->getDish()->getPrice();
+        }
+        return $this->render('cart/userCart.html.twig', [
             'cart' => $cart,
             'orderRows' => $orderRows,
+            'totalSum' => $totalSum,
         ]);
     }
+
+    /**
+     * @Route("/order/{id}", name="order")
+    */
+    public function makeOrder($id)
+    {
+        $cart= $this->getDoctrine()->getRepository(Cart::class)->find($id);
+        $cart->setIsOrdered(true);
+        $order = new Order();
+        $order->setCart($cart);
+        return $this->render('cart/order.html.twig');
+    }
+
 }
