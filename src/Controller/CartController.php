@@ -7,6 +7,7 @@ use App\Entity\Cart;
 use App\Entity\Dish;
 use App\Entity\Order;
 use App\Entity\OrderRow;
+use App\Entity\Table;
 use App\Entity\TableReservation;
 use App\Entity\User;
 use App\Form\OrderRowType;
@@ -77,6 +78,11 @@ class CartController extends AbstractController
             'user' => $user,
             'isOrdered' => false,
         ]);
+        if(!$cart){
+            $cart = new Cart();
+            $cart->setUser($user);
+            return $this->render('cart/emptyCart.html.twig');
+        }
 
         $orderRows = $cart->getOrderRows();
         $totalSum = 0;
@@ -101,14 +107,22 @@ class CartController extends AbstractController
         $order = new Order();
         $order->setCart($cart);
 
-        $tableReservation = new TableReservation();
-        $form = $this->createForm(TableReservationType::class, $tableReservation);
+        $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
-        $tableReservation->addOrder($order);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $table = $this->getDoctrine()->getRepository(Table::class)->findFreeTable($order->getPersonNumber());
+            if(!$table instanceof Table){
+                return $this->render('order/noFreeTables.html.twig', [
+                    'personNumber' => $order->getPersonNumber(),
+                ]);
+            }
+            $table->setIsFree(false);
+            $order->setReservedTable($table);
+
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($tableReservation);
+            $entityManager->persist($table);
+            $entityManager->persist($order);
             $entityManager->flush();
             return $this->redirectToRoute('index');
         }

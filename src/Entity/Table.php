@@ -21,6 +21,12 @@ class Table
      */
     private $capacity;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isFree = true;
+
+    
 
     public function getCapacity(): ?float
     {
@@ -30,6 +36,18 @@ class Table
     public function setCapacity(float $capacity): self
     {
         $this->capacity = $capacity;
+
+        return $this;
+    }
+
+    public function getIsFree(): ?bool
+    {
+        return $this->isFree;
+    }
+
+    public function setIsFree(bool $isFree): self
+    {
+        $this->isFree = $isFree;
 
         return $this;
     }

@@ -34,10 +34,16 @@ class Order
     private $bill;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TableReservation", inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Table")
      */
-    private $tableReservation;
+    private $reservedTable;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $personNumber;
+
+
 
 
 
@@ -82,14 +88,26 @@ class Order
         return $this;
     }
 
-    public function getTableReservation(): ?TableReservation
+    public function getReservedTable(): ?Table
     {
-        return $this->tableReservation;
+        return $this->reservedTable;
     }
 
-    public function setTableReservation(?TableReservation $tableReservation): self
+    public function setReservedTable(?Table $reservedTable): self
     {
-        $this->tableReservation = $tableReservation;
+        $this->reservedTable = $reservedTable;
+
+        return $this;
+    }
+
+    public function getPersonNumber(): ?int
+    {
+        return $this->personNumber;
+    }
+
+    public function setPersonNumber(int $personNumber): self
+    {
+        $this->personNumber = $personNumber;
 
         return $this;
     }
