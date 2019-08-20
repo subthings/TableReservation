@@ -4,28 +4,30 @@
 
 {% block body %}
     <h1>Your cart</h1>
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th scope="col">Position</th>
-        <th scope="col">Number</th>
-        <th scope="col">Price</th>
-    </tr>
-    </thead>
-    <tbody>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Position</th>
+            <th scope="col">Price</th>
+            <th scope="col">Number</th>
+            <th scope="col">Sum</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
 
-    {% for orderRow in orderRows %}
+        {% for orderRow in orderRows %}
+            <tr>
+                <th scope="row">{{ orderRow.dish }}</th>
+                <th scope="col">Price</th>
+                <td scope="row">{{ orderRow.quantity }}</td>
+                <td scope="row">price</td>
+            </tr>
+        {% endfor %}
 
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">{{ orderRow.dish }}</h4>
-            <h6 class="card-subtitle mb-2 text-muted">{{ orderRow.quantity }}</h6>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-    </div>
-    {% endfor %}
+        </tbody>
+    </table>
     <h4>Total price: {{ totalSum }}</h4>
     <a type="submit" class="btn btn-warning" href="{{ path('order', { id: cart.id }) }}">Order</a>
-    </tbody>
-</table>
+
 {% endblock %}
