@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\IdentityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,12 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class TableReservation
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use IdentityTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Table")
@@ -42,14 +38,14 @@ class TableReservation
      */
     private $orders;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantity;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getPickedTable(): ?Table
@@ -115,6 +111,18 @@ class TableReservation
                 $order->setTableReservation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

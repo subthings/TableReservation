@@ -7,9 +7,11 @@ use App\Entity\Cart;
 use App\Entity\Dish;
 use App\Entity\Order;
 use App\Entity\OrderRow;
+use App\Entity\TableReservation;
 use App\Entity\User;
 use App\Form\OrderRowType;
 use App\Form\OrderType;
+use App\Form\TableReservationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -95,16 +97,22 @@ class CartController extends AbstractController
     {
         $cart= $this->getDoctrine()->getRepository(Cart::class)->find($id);
         $cart->setIsOrdered(true);
+
         $order = new Order();
         $order->setCart($cart);
-        $form = $this->createForm(OrderType::class, $order);
+
+        $tableReservation = new TableReservation();
+        $form = $this->createForm(TableReservationType::class, $tableReservation);
         $form->handleRequest($request);
+        $tableReservation->addOrder($order);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($order);
+            $entityManager->persist($tableReservation);
             $entityManager->flush();
             return $this->redirectToRoute('index');
         }
+
 
         return $this->render('cart/order.html.twig', [
             'form'=>$form->createView(),

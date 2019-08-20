@@ -12,8 +12,7 @@ class OrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date')
-            ->add('table')
+            ->add('tableReservation')
         ;
     }
 
