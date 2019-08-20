@@ -87,7 +87,7 @@ class CartController extends AbstractController
         $orderRows = $cart->getOrderRows();
         $totalSum = 0;
         foreach ($orderRows as $orderRow){
-            $totalSum += $orderRow->getDish()->getPrice() * $orderRow->getQuanity();
+            $totalSum += $orderRow->getDish()->getPrice() * $orderRow->getQuantity();
         }
         return $this->render('cart/userCart.html.twig', [
             'cart' => $cart,

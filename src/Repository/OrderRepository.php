@@ -19,6 +19,14 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
+    public function findNotPayed()
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.payed = false')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 
     // /**
     //  * @return Order[] Returns an array of Order objects

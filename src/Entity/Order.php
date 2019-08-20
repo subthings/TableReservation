@@ -24,9 +24,9 @@ class Order
     private $cart;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean")
      */
-    private $payed;
+    private $payed = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bill", inversedBy="orders")
@@ -42,10 +42,6 @@ class Order
      * @ORM\Column(type="integer")
      */
     private $personNumber;
-
-
-
-
 
     public function getUser(): ?User
     {
