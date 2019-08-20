@@ -111,7 +111,8 @@ class CartController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $table = $this->getDoctrine()->getRepository(Table::class)->findFreeTable($order->getPersonNumber());
+            $table = $this->getDoctrine()->getRepository(Table::class)
+                ->findFreeTable($order->getPersonNumber());
             if(!$table instanceof Table){
                 return $this->render('order/noFreeTables.html.twig', [
                     'personNumber' => $order->getPersonNumber(),
