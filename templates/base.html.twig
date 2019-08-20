@@ -7,9 +7,17 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-        <link href="{{ asset('style/css/style.css') }}" rel="stylesheet" />
-        <link href="{{ asset('style/css/font-awesome.min.css') }}" rel="stylesheet" />
+        <link href="{{ asset('style/css/bootstrap.min.css') }}" rel="stylesheet" />
+        <link href="{{ asset('style/css/open-iconic-bootstrap.min.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ asset('style/css/animate.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/css/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/css/owl.theme.default.min.css') }}">
         <link rel="stylesheet" href="{{ asset('style/css/magnific-popup.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('style/css/bootstrap-datepicker.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/css/jquery.timepicker.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/css/icomoon.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/css/style.css') }}">
         <title>{% block title %}Base!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
@@ -17,9 +25,9 @@
     {{ render(controller(
         'App\\Controller\\NavbarController::navbarShow'
     )) }}
-    <div class="jumbotron">
+
         {% block body %}{% endblock %}
-    </div>
+
         {% block javascripts %}{% endblock %}
     </body>
 </html>

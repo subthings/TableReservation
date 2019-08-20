@@ -3,22 +3,40 @@
 {% block title %}{{ category }} Menu{% endblock %}
 
 {% block body %}
-        <h1>{{category}} Menu ✅</h1>
-        <ul>
-            {% for dish in dishes %}
-
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ dish.name }}</h4>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ dish.price }}</h6>
-                        <p class="card-text">{{dish.imageFile}}</p>
-                        <img style="height: 100px; width: 100px" src="{{ vich_uploader_asset(dish, 'imageFile') }}" alt="your favorite meal">
-                        <a href="{{ path('addToCart', { id: dish.id }) }}" class="card-link">Add</a>
+    <section class="site-section" id="section-menu">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center mb-5 site-animate">
+                    <h2 class="display-4">Delicious Menu</h2>
+                    <div class="row justify-content-center">
+                        <div class="col-md-7">
+                            <p class="lead">{{category}} menu ✅</p>
+                        </div>
                     </div>
                 </div>
-            {% endfor %}
-        </ul>
-
+                <div class="col-md-12 text-center">
+                    <div class="tab-content text-left">
+                        <div class="tab-pane fade show active" id="pills-breakfast" role="tabpanel" aria-labelledby="pills-breakfast-tab">
+                            <div class="row">
+                                <div class="col-md-6 site-animate">
+                                    {% for dish in dishes %}
+                                    <div class="media menu-item">
+                                        <img class="mr-3" src="{{dish.imageFile}}" class="img-fluid" alt="where?">
+                                        <div class="media-body">
+                                            <h5 class="mt-0">{{ dish.name }}</h5>
+                                            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                                            <h6 class="text-primary menu-price">{{ dish.price }}</h6>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
 {% endblock %}
