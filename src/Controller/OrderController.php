@@ -18,7 +18,7 @@ class OrderController extends AbstractController
     public function index($id)
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
-        $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed();
+        $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed($user);
         $carts = $this->getDoctrine()->getRepository(Cart::class)->findBy([
             'user' => $user,
         ]);
@@ -43,12 +43,12 @@ class OrderController extends AbstractController
     public function pay($id)
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
-        $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed();
+        $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed($user);
         $em = $this->getDoctrine()->getManager();
         foreach ($notPayedOrders as $order){
             $order->setPayed(true);
             $table = $order->getReservedTable();
-            $table->setIsFree(false);
+            $table->setIsFree(true);
             $em->persist($order);
             $em->persist($table);
         }

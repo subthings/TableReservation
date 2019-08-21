@@ -33,19 +33,27 @@ class CartController extends AbstractController
 
         $cart = $this->getDoctrine()->getRepository(Cart::class)->findOneBy([
             'user' => $user,
-            'isOrdered' => 0,
+            'isOrdered' => false,
         ]);
+        if ($cart) {
+            $orderRows = $cart->getOrderRows();
 
-        if (!$cart){
+            foreach ($orderRows as $orRow) {
+                if ($orRow->getDish() == $dish) {
+                    $orderRow = $orRow;
+                }
+            }
+        } else {
             $cart = new Cart();
             $cart->setUser($user);
         }
 
-        $orderRow = new OrderRow();
-        $orderRow->setDish($dish);
-        $orderRow->setCart($cart);
-
-        $cart->addOrderRow($orderRow);
+        if (!$orderRow) {
+            $orderRow = new OrderRow();
+            $orderRow->setDish($dish);
+            $orderRow->setCart($cart);
+            $cart->addOrderRow($orderRow);
+        }
 
         $form = $this->createForm(OrderRowType::class, $orderRow);
 
@@ -64,7 +72,7 @@ class CartController extends AbstractController
         }
 
         return $this->render('cart/addRow.html.twig', [
-            'form'=>$form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -78,7 +86,7 @@ class CartController extends AbstractController
             'user' => $user,
             'isOrdered' => false,
         ]);
-        if(!$cart){
+        if (!$cart) {
             $cart = new Cart();
             $cart->setUser($user);
             return $this->render('cart/emptyCart.html.twig');
@@ -86,7 +94,7 @@ class CartController extends AbstractController
 
         $orderRows = $cart->getOrderRows();
         $totalSum = 0;
-        foreach ($orderRows as $orderRow){
+        foreach ($orderRows as $orderRow) {
             $totalSum += $orderRow->getDish()->getPrice() * $orderRow->getQuantity();
         }
         return $this->render('cart/userCart.html.twig', [
@@ -98,10 +106,10 @@ class CartController extends AbstractController
 
     /**
      * @Route("/order/{id}", name="order")
-    */
+     */
     public function makeOrder(Request $request, $id): Response
     {
-        $cart= $this->getDoctrine()->getRepository(Cart::class)->find($id);
+        $cart = $this->getDoctrine()->getRepository(Cart::class)->find($id);
         $cart->setIsOrdered(true);
 
         $order = new Order();
@@ -113,7 +121,7 @@ class CartController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $table = $this->getDoctrine()->getRepository(Table::class)
                 ->findFreeTable($order->getPersonNumber());
-            if(!$table instanceof Table){
+            if (!$table instanceof Table) {
                 return $this->render('order/noFreeTables.html.twig', [
                     'personNumber' => $order->getPersonNumber(),
                 ]);
@@ -130,7 +138,7 @@ class CartController extends AbstractController
 
 
         return $this->render('cart/order.html.twig', [
-            'form'=>$form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 

@@ -20,10 +20,14 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
-    public function findNotPayed()
+    public function findNotPayed($user)
     {
         return $this->createQueryBuilder('o')
-            ->where('o.payed = false')
+
+            ->innerJoin('o.cart', 'c')
+            ->where('c.user = :user')
+            ->andWhere('o.payed = false')
+            ->setParameter('user', $user)
             ->getQuery()
             ->getResult()
             ;

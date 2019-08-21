@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\IdentityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,12 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrderRow
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use IdentityTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Dish")
@@ -36,11 +32,6 @@ class OrderRow
     public function __toString()
     {
         return "$this->id $this->dish $this->quantity";
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getDish(): ?Dish
