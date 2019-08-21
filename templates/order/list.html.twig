@@ -1,24 +1,43 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Orders list{% endblock %}
-
+{% block header %}All your reservations, {{ user }}.{% endblock %}
 {% block body %}
-    <h1>All your reservations, {{ user }}.</h1>
+
     <h3>Orders waiting to be payed: </h3>
-    <div class="list-group">
+
+
     {% for order in notPayedOrders %}
+
+
+
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
+
                 <h5 class="mb-1">Table number {{ order.reservedTable.id }}</h5>
+
                 <small class="text-muted">3 days ago</small>
-            </div>
+                <table class="table table-hover">
+                    <tbody>
             {% for row in order.cart.orderRows %}
-            <p class="mb-1">{{ row.dish }}</p>
-            <small class="text-muted">{{ row.quantity }}</small>
+                <tr>
+                    <th scope="col">{{ row.dish }}</th>
+                    <td>Column heading</td>
+                    <td>{{ row.quantity }}</td>
+                    <td>Column heading</td>
+                </tr>
             {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </a>
-        {% else %}
+        <a type="submit" class="btn btn-warning" href="{{ path('pay', { id: user.id }) }}">Pay</a>
+    {% else %}
         <h3>No order found</h3>
         {% endfor %}
-    </div>
+
+    {#<h4>Total price: {{ totalSum }}</h4>#}
+
+
+
 {% endblock %}

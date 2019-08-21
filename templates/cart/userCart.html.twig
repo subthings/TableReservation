@@ -2,8 +2,9 @@
 
 {% block title %}Hello CartController!{% endblock %}
 
+
+{% block header %}Your cart, {{ cart.user }}{% endblock %}
 {% block body %}
-    <h1>Your cart</h1>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -18,10 +19,11 @@
 
         {% for orderRow in orderRows %}
             <tr>
-                <th scope="row">{{ orderRow.dish }}</th>
-                <th scope="col">Price</th>
-                <td scope="row">{{ orderRow.quantity }}</td>
-                <td scope="row">price</td>
+                <th scope="col">{{ orderRow.dish }}</th>
+                <td>Price</td>
+                <td>{{ orderRow.quantity }}</td>
+                <td>price</td>
+                <td>Delete</td>
             </tr>
         {% endfor %}
 
