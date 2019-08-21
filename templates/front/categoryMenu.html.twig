@@ -15,7 +15,7 @@
 
                 {% for dish in dishes %}
                     <div class="media menu-item">
-                        <img class="mr-3" src="{{ dish.imageFile }}" class="img-fluid" alt="where?">
+                        <img class="mr-3" src="{{ vich_uploader_asset(dish, 'imageFile') }}" class="img-fluid" alt="where?">
                         <div class="media-body">
                             <h5 class="mt-0">{{ dish.name }}</h5>
                             <p>Far far away, behind the word mountains, far from the countries Vokalia and

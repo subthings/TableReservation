@@ -115,25 +115,33 @@ class CartController extends AbstractController
         $order = new Order();
         $order->setCart($cart);
 
-        $form = $this->createForm(OrderType::class, $order);
-        $form->handleRequest($request);
+        $anotherOrder = $this->getDoctrine()->getRepository(Order::class)->findOneBy([
+            'payed' => false,
+            //user??
+        ]);
+        $table = $anotherOrder->getReservedTable();
+        if (!$table)
+        {
+            $form = $this->createForm(OrderType::class, $order);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $table = $this->getDoctrine()->getRepository(Table::class)
-                ->findFreeTable($order->getPersonNumber());
-            if (!$table instanceof Table) {
-                return $this->render('order/noFreeTables.html.twig', [
-                    'personNumber' => $order->getPersonNumber(),
-                ]);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $table = $this->getDoctrine()->getRepository(Table::class)
+                    ->findFreeTable($order->getPersonNumber());
+                if (!$table instanceof Table) {
+                    return $this->render('order/noFreeTables.html.twig', [
+                        'personNumber' => $order->getPersonNumber(),
+                    ]);
+                }
+                $table->setIsFree(false);
+                $order->setReservedTable($table);
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($table);
+                $entityManager->persist($order);
+                $entityManager->flush();
+                return $this->redirectToRoute('index');
             }
-            $table->setIsFree(false);
-            $order->setReservedTable($table);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($table);
-            $entityManager->persist($order);
-            $entityManager->flush();
-            return $this->redirectToRoute('index');
         }
 
 
