@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\IdentityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRowRepository")
@@ -21,6 +22,7 @@ class OrderRow
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\GreaterThanOrEqual(1)
      */
     private $quantity;
 

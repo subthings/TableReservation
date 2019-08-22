@@ -48,7 +48,7 @@ class CartController extends AbstractController
             $cart->setUser($user);
         }
 
-        if (!$orderRow) {
+        if (!isset($orderRow)) {
             $orderRow = new OrderRow();
             $orderRow->setDish($dish);
             $orderRow->setCart($cart);
@@ -114,14 +114,22 @@ class CartController extends AbstractController
 
         $order = new Order();
         $order->setCart($cart);
+        $user = $cart->getUser();
 
-        $anotherOrder = $this->getDoctrine()->getRepository(Order::class)->findOneBy([
-            'payed' => false,
-            //user??
-        ]);
-        $table = $anotherOrder->getReservedTable();
-        if (!$table)
-        {
+
+        $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed($user);
+        if ($notPayedOrders) {
+            $table = $notPayedOrders[0]->getReservedTable();
+            $personNumber = $notPayedOrders[0]->getPersonNumber();
+
+            $order->setReservedTable($table);
+            $order->setPersonNumber($personNumber);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($order);
+            $entityManager->flush();
+
+        } else {
             $form = $this->createForm(OrderType::class, $order);
             $form->handleRequest($request);
 
@@ -142,12 +150,15 @@ class CartController extends AbstractController
                 $entityManager->flush();
                 return $this->redirectToRoute('index');
             }
+            return $this->render('cart/order.html.twig', [
+                'form' => $form->createView(),
+            ]);
         }
-
-
-        return $this->render('cart/order.html.twig', [
-            'form' => $form->createView(),
+        return $this->render('order/list.html.twig', [
+            'user' => $user,
+            'notPayedOrders' => $notPayedOrders,
         ]);
+
     }
 
 }
