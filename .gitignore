@@ -1,6 +1,5 @@
 docker/data/*
 .idea/*
-config/*
 vendor/*
 # Cache, session files and logs (Symfony3)
 /var/*

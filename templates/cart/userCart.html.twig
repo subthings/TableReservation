@@ -20,10 +20,11 @@
         {% for orderRow in orderRows %}
             <tr>
                 <th scope="col">{{ orderRow.dish }}</th>
-                <td>Price</td>
+                <td>{{ orderRow.dish.price }}</td>
                 <td>{{ orderRow.quantity }}</td>
-                <td>price</td>
-                <td>Delete</td>
+                <td>{{ orderRow.dish.price * orderRow.quantity }}</td>
+                <td><a type="submit" class="btn btn-danger" href="{{ path('orderRowDelete', { id: orderRow.id }) }}">Delete</a>
+                </td>
             </tr>
         {% endfor %}
 

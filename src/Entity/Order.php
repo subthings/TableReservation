@@ -43,6 +43,16 @@ class Order
      */
     private $personNumber;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $time;
+
+    public function __construct()
+    {
+        $this->time = new \DateTime();
+    }
+
     public function getUser(): ?User
     {
         return $this->cart->user;
@@ -104,6 +114,18 @@ class Order
     public function setPersonNumber(int $personNumber): self
     {
         $this->personNumber = $personNumber;
+
+        return $this;
+    }
+
+    public function getTime(): ?\DateTimeInterface
+    {
+        return $this->time;
+    }
+
+    public function setTime(\DateTimeInterface $time): self
+    {
+        $this->time = $time;
 
         return $this;
     }

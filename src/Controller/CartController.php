@@ -3,18 +3,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+
 use App\Entity\Cart;
 use App\Entity\Dish;
-use App\Entity\Order;
 use App\Entity\OrderRow;
-use App\Entity\Table;
-use App\Entity\TableReservation;
 use App\Entity\User;
+
 use App\Form\OrderRowType;
-use App\Form\OrderType;
-use App\Form\TableReservationType;
+
+use App\Service\CartManager;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,7 +23,7 @@ class CartController extends AbstractController
     /**
      * @Route("/add/cart/{id}", name="addToCart")
      */
-    public function addToCart(Request $request, $id): Response
+    public function addToCart(Request $request, $id, CartManager $cartManager): Response
     {
 
         $dish = $this->getDoctrine()->getRepository(Dish::class)->find($id);
@@ -44,8 +43,7 @@ class CartController extends AbstractController
                 }
             }
         } else {
-            $cart = new Cart();
-            $cart->setUser($user);
+            $cartManager->createCart();
         }
 
         if (!isset($orderRow)) {
@@ -60,13 +58,7 @@ class CartController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($orderRow);
-            $entityManager->flush();
-
-
-            $entityManager->persist($cart);
-            $entityManager->flush();
+            $this->cartChange($cart, $orderRow);
 
             return $this->redirectToRoute('index');
         }
@@ -104,61 +96,13 @@ class CartController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/order/{id}", name="order")
-     */
-    public function makeOrder(Request $request, $id): Response
-    {
-        $cart = $this->getDoctrine()->getRepository(Cart::class)->find($id);
-        $cart->setIsOrdered(true);
+    private function cartChange($cart, $orderRow) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($orderRow);
+        $entityManager->flush();
 
-        $order = new Order();
-        $order->setCart($cart);
-        $user = $cart->getUser();
-
-
-        $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed($user);
-        if ($notPayedOrders) {
-            $table = $notPayedOrders[0]->getReservedTable();
-            $personNumber = $notPayedOrders[0]->getPersonNumber();
-
-            $order->setReservedTable($table);
-            $order->setPersonNumber($personNumber);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($order);
-            $entityManager->flush();
-
-        } else {
-            $form = $this->createForm(OrderType::class, $order);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $table = $this->getDoctrine()->getRepository(Table::class)
-                    ->findFreeTable($order->getPersonNumber());
-                if (!$table instanceof Table) {
-                    return $this->render('order/noFreeTables.html.twig', [
-                        'personNumber' => $order->getPersonNumber(),
-                    ]);
-                }
-                $table->setIsFree(false);
-                $order->setReservedTable($table);
-
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($table);
-                $entityManager->persist($order);
-                $entityManager->flush();
-                return $this->redirectToRoute('index');
-            }
-            return $this->render('cart/order.html.twig', [
-                'form' => $form->createView(),
-            ]);
-        }
-        return $this->render('order/list.html.twig', [
-            'user' => $user,
-            'notPayedOrders' => $notPayedOrders,
-        ]);
-
+        $entityManager->persist($cart);
+        $entityManager->flush();
     }
 
 }

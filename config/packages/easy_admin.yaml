@@ -1,0 +1,39 @@
+# config/packages/easy_admin.yaml
+
+easy_admin:
+    design:
+        brand_color: '#9370DB'
+
+    entities:
+        # List the entity class name you want to manage
+
+            Dish:
+                class: App\Entity\Dish
+
+                list:
+                    fields:
+                        - id
+                        - name
+                        - price
+                        - category
+                        - { property: 'image', type: 'image', base_path: '%app.path.product_images%' }
+                form:
+                  fields:
+                    - name
+                    - price
+                    - category
+                    - { property: 'imageFile', type: 'file' }
+            Order:
+                class: App\Entity\Order
+
+            Cart:
+                class: App\Entity\Cart
+
+            Category:
+                class: App\Entity\Category
+
+            Table:
+                class: App\Entity\Table
+
+            User:
+                class: App\Entity\User

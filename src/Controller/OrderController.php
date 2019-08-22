@@ -5,13 +5,92 @@ namespace App\Controller;
 
 use App\Entity\Cart;
 use App\Entity\Order;
+use App\Entity\OrderRow;
 use App\Entity\Table;
 use App\Entity\User;
+use App\Form\OrderType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class OrderController extends AbstractController
 {
+    /**
+     * @Route("/order/{id}", name="order")
+     */
+    public function makeOrder(Request $request, $id): Response
+    {
+        $cart = $this->getDoctrine()->getRepository(Cart::class)->find($id);
+        $cart->setIsOrdered(true);
+
+        $order = new Order();
+        $order->setCart($cart);
+        $user = $cart->getUser();
+
+
+        $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed($user);
+        if ($notPayedOrders) {
+            $table = $notPayedOrders[0]->getReservedTable();
+            $personNumber = $notPayedOrders[0]->getPersonNumber();
+
+            $order->setReservedTable($table);
+            $order->setPersonNumber($personNumber);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($order);
+            $entityManager->flush();
+
+        } else {
+            $form = $this->createForm(OrderType::class, $order);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $table = $this->getDoctrine()->getRepository(Table::class)
+                    ->findFreeTable($order->getPersonNumber());
+                if (!$table instanceof Table) {
+                    return $this->render('order/noFreeTables.html.twig', [
+                        'personNumber' => $order->getPersonNumber(),
+                    ]);
+                }
+                $table->setIsFree(false);
+                $order->setReservedTable($table);
+
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($table);
+                $entityManager->persist($order);
+                $entityManager->flush();
+                return $this->redirectToRoute('index');
+            }
+            return $this->render('cart/order.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        }
+        return $this->render('order/list.html.twig', [
+            'user' => $user,
+            'notPayedOrders' => $notPayedOrders,
+        ]);
+    }
+
+    /**
+     * @Route("/order/{id}/delete", name="orderRowDelete")
+     */
+    public function deleteOrderRow($id)
+    {
+        $orderRow = $this->getDoctrine()->getRepository(OrderRow::class)->find($id);
+        $entityManager = $this->getDoctrine()->getManager();
+        if (!$orderRow) {
+            throw $this->createNotFoundException(
+                'No order row found for id '.$id
+            );
+        }
+        $entityManager->remove($orderRow);
+        $entityManager->flush();
+        return $this->render('cart/userCart.html.twig');
+    }
+
+
     /**
      * @Route("/orders/{id}", name="ordersList")
      */
@@ -22,14 +101,7 @@ class OrderController extends AbstractController
         $carts = $this->getDoctrine()->getRepository(Cart::class)->findBy([
             'user' => $user,
         ]);
-        /*
-        $notPayedOrders =[];
-        foreach ($carts as $cart) {
-            $notPayedOrders[] = $this->getDoctrine()->getRepository(Order::class)->findBy([
-                'payed' => false,
-                'cart' => $cart,
-            ]);
-        }*/
+
         return $this->render('order/list.html.twig', [
             'controller_name' => 'OrderTypeController',
             'user' => $user,

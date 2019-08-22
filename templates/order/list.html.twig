@@ -16,15 +16,15 @@
 
                 <h5 class="mb-1">Table number {{ order.reservedTable.id }}</h5>
 
-                <small class="text-muted">3 days ago</small>
+                <small class="text-muted">{{ order.time|date("m/d/Y h:m") }}</small>
                 <table class="table table-hover">
                     <tbody>
             {% for row in order.cart.orderRows %}
                 <tr>
                     <th scope="col">{{ row.dish }}</th>
-                    <td>Column heading</td>
+                    <td>{{ row.dish.price }}</td>
                     <td>{{ row.quantity }}</td>
-                    <td>Column heading</td>
+                    <td>{{ row.dish.price*row.quantity }}</td>
                 </tr>
             {% endfor %}
                     </tbody>
