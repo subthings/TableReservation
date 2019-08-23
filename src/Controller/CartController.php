@@ -30,23 +30,10 @@ class CartController extends AbstractController
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $cart = $this->getDoctrine()->getRepository(Cart::class)->findOneBy([
-            'user' => $user,
-            'isOrdered' => false,
-        ]);
-        if ($cart) {
-            $orderRows = $cart->getOrderRows();
-
-            foreach ($orderRows as $orRow) {
-                if ($orRow->getDish() == $dish) {
-                    $orderRow = $orRow;
-                }
-            }
-        } else {
-            $cartManager->createCart();
-        }
+        $cart = $cartManager->getOrCreateCart($user, $dish);
 
         if (!isset($orderRow)) {
+
             $orderRow = new OrderRow();
             $orderRow->setDish($dish);
             $orderRow->setCart($cart);
@@ -58,7 +45,8 @@ class CartController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->cartChange($cart, $orderRow);
+            $entityManager = $this->getDoctrine()->getManager();
+            $cartManager->addOrderRowToCart($cart, $orderRow);
 
             return $this->redirectToRoute('index');
         }
@@ -96,13 +84,5 @@ class CartController extends AbstractController
         ]);
     }
 
-    private function cartChange($cart, $orderRow) {
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($orderRow);
-        $entityManager->flush();
-
-        $entityManager->persist($cart);
-        $entityManager->flush();
-    }
 
 }
