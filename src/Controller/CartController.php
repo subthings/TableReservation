@@ -25,7 +25,6 @@ class CartController extends AbstractController
      */
     public function addToCart(Request $request, $id, CartManager $cartManager): Response
     {
-
         $dish = $this->getDoctrine()->getRepository(Dish::class)->find($id);
 
         $user = $this->get('security.token_storage')->getToken()->getUser();

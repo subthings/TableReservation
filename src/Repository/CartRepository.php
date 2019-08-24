@@ -27,7 +27,7 @@ class CartRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->andWhere('c.isOrdered = false')
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
             ;
 
     }
