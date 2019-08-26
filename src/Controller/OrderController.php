@@ -10,6 +10,7 @@ use App\Entity\Table;
 use App\Entity\User;
 use App\Form\OrderType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -76,7 +77,7 @@ class OrderController extends AbstractController
     /**
      * @Route("/order/{id}/delete", name="orderRowDelete")
      */
-    public function deleteOrderRow($id)
+    public function deleteOrderRow($id): Response
     {
         $orderRow = $this->getDoctrine()->getRepository(OrderRow::class)->find($id);
         $entityManager = $this->getDoctrine()->getManager();
@@ -112,7 +113,7 @@ class OrderController extends AbstractController
     /**
      * @Route("/orders/{id}/pay", name="pay")
      */
-    public function pay($id)
+    public function pay($id): Response
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed($user);
@@ -128,4 +129,5 @@ class OrderController extends AbstractController
         return $this->redirectToRoute('index');
         //free table, payed order
     }
+
 }

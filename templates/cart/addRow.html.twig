@@ -1,11 +1,26 @@
 {% extends 'base.html.twig' %}
-
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+{% endblock %}
 {% block title %}Add to cart{% endblock %}
-
+{% block header %}{{ dish.name }}{% endblock %}
 {% block body %}
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-<button class="btn btn-success">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+    <span class="pl-2 article-details">
+        <span class="js-like-dish-count">5</span>
 
+<a href="{{ path('likeDish', {id: dish.id}) }}" class="fa fa-heart-o like-dish js-like-dish"></a>
+
+
+    </span>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success">{{ button_label|default('Add') }}</button>
+    {{ form_end(form) }}
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/dish_show.js') }}"></script>
 {% endblock %}

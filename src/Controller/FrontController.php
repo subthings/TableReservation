@@ -26,29 +26,20 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("category/{id}", name="categoryMenu")
+     * @Route("category/{name}", name="categoryMenu")
      */
-    public function getCategoryMenu($id):Response
+    public function getCategoryMenu($name):Response
     {
-        $caregories = $this->getDoctrine()->getRepository(Category::class)->findAll();
-        $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
+        $category = $this->getDoctrine()->getRepository(Category::class)->findOneBy([
+            'name' => $name,
+        ]);
         $dishes = $this->getDoctrine()->getRepository(Dish::class)->findBy([
             'category' => $category
         ]);
         return $this->render('front/categoryMenu.html.twig', [
             'controller_name' => 'FrontController',
-            'categories' => $caregories,
             'category' => $category,
             'dishes' => $dishes,
     ]);
     }
-
-    /*
-     * @Route("/{category}", name="category_menu")
-
-    public function categoryMenu(Request $request, $id)
-    {
-        $dishes = $this->getDoctrine()->getRepository(Dish::class)->find($id);
-    }
-*/
 }

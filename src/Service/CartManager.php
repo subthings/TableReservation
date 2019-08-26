@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Entity\Cart;
 use App\Entity\Dish;
+use App\Entity\OrderRow;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,6 +29,16 @@ class CartManager
     {
         $this->entityManager = $entityManager;
         $this->cart = $entityManager->getRepository(Cart::class);
+    }
+
+    public function returnOrderRow(Cart $cart, Dish $dish){
+        if (!isset($orderRow)) {
+            $orderRow = new OrderRow();
+            $orderRow->setDish($dish);
+            $orderRow->setCart($cart);
+            $cart->addOrderRow($orderRow);
+        }
+        return $orderRow;
     }
 
 

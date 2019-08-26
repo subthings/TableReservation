@@ -12,7 +12,7 @@
 
             {% for category in categories %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('categoryMenu', { id: category.id }) }}">{{ category }}</a>
+                    <a class="nav-link" href="{{ path('categoryMenu', { name: category.name }) }}">{{ category }}</a>
                 </li>
             {% endfor %}
         <form class="form-inline my-2 my-lg-0">

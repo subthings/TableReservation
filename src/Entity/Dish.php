@@ -21,16 +21,18 @@ class Dish
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Unique
      */
     private $name;
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\NotNull()
      */
     private $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="dish",cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
@@ -53,6 +55,17 @@ class Dish
      * @var \DateTime
      */
     private $updatedAt;
+
+    /**
+     * @ORM\Column(type="text", name="dishDescription")
+     *
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    private $likes = 0;
 
 
     public function setImageFile(File $image = null)
@@ -118,5 +131,29 @@ class Dish
         $this->category = $category;
 
         return  $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getLikes(): ?int
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(?int $likes): self
+    {
+        $this->likes = $likes;
+
+        return $this;
     }
 }

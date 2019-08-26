@@ -16,7 +16,7 @@ class OrderRow
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Dish")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="dish_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $dish;
 

@@ -14,47 +14,14 @@ use App\Form\OrderRowType;
 use App\Service\CartManager;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 class CartController extends AbstractController
 {
-    /**
-     * @Route("/add/cart/{id}", name="addToCart")
-     */
-    public function addToCart(Request $request, $id, CartManager $cartManager): Response
-    {
-        $dish = $this->getDoctrine()->getRepository(Dish::class)->find($id);
-
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $cart = $cartManager->getOrCreateCart($user, $dish);
-
-        if (!isset($orderRow)) {
-
-            $orderRow = new OrderRow();
-            $orderRow->setDish($dish);
-            $orderRow->setCart($cart);
-            $cart->addOrderRow($orderRow);
-        }
-
-        $form = $this->createForm(OrderRowType::class, $orderRow);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $cartManager->addOrderRowToCart($cart, $orderRow);
-
-            return $this->redirectToRoute('index');
-        }
-
-        return $this->render('cart/addRow.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
     /**
      * @Route("/showCart/{id}", name="showCart")
      */
@@ -82,4 +49,5 @@ class CartController extends AbstractController
             'totalSum' => $totalSum,
         ]);
     }
+
 }
