@@ -15,11 +15,12 @@
 
                 {% for dish in dishes %}
                     <div class="media menu-item">
-                        <img class="mr-3" src="{{ vich_uploader_asset(dish, 'imageFile') }}" style="width: 100px; height: 100px" class="img-fluid" alt="where?">
+                        <img class="mr-3" src="{{ vich_uploader_asset(dish, 'imageFile') }}"
+                             style="width: 100px; height: 100px" class="img-fluid" alt="where?">
                         <div class="media-body">
                             <a href="{{ path('showDish', {id: dish.id}) }}"><h5 class="mt-0">{{ dish.name }}</h5></a>
                             <p>{{ dish.description }}</p>
-                            <h6 class="text-primary menu-price">{{ dish.price }} $</h6>
+                            <h6 class="text-primary menu-price">$ {{ dish.price }}  </h6>
                         </div>
                         <p class="mb-0"><a href="{{ path('showDish', {id: dish.id}) }}"
                                            class="btn btn-primary btn-sm">More</a></p>

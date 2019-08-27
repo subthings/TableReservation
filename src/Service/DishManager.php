@@ -12,6 +12,4 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DishManager
 {
-
-
 }

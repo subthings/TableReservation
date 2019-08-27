@@ -41,7 +41,14 @@ class CartController extends AbstractController
         $orderRows = $cart->getOrderRows();
         $totalSum = 0;
         foreach ($orderRows as $orderRow) {
-            $totalSum += $orderRow->getDish()->getPrice() * $orderRow->getQuantity();
+            if (!$orderRow->getDish()){
+                return $this->render('front/emergencyPage.html.twig', [
+                    'message' => 'There is a dish that has been deleted in your cart.'
+                ]);
+            }
+            else {
+                $totalSum += $orderRow->getDish()->getPrice() * $orderRow->getQuantity();
+            }
         }
         return $this->render('cart/userCart.html.twig', [
             'cart' => $cart,

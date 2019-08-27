@@ -130,4 +130,22 @@ class OrderController extends AbstractController
         //free table, payed order
     }
 
+
+    /**
+     * @param $name
+     * @param \Swift_Mailer $mailer
+     * @return Response
+     * @Route("/send", name="send")
+     */
+    public function swiftMailer( \Swift_Mailer $mailer): Response
+    {
+        $message = (new \Swift_Message('Hello Email'))
+            ->setFrom('reservationmailer25@gmail.com')
+            ->setTo('reservationmailer25@gmail.com')
+            ->setBody('You should see me from the profiler!');
+
+        $mailer->send($message);
+
+        return $this->render('front/index.html.twig');
+    }
 }

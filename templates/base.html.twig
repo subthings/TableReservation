@@ -2,34 +2,34 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/open-iconic-bootstrap.min.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/owl.theme.default.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/magnific-popup.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-datepicker.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/jquery.timepicker.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/icomoon.css') }}">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
         <title>{% block title %}Base!{% endblock %}</title>
         {% block stylesheets %}
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-                  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-            <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
-            <link href="{{ asset('css/open-iconic-bootstrap.min.css') }}" rel="stylesheet" />
-            <link rel="stylesheet" href="{{ asset('css/animate.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/owl.theme.default.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/magnific-popup.css') }}">
-
-            <link rel="stylesheet" href="{{ asset('css/bootstrap-datepicker.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/jquery.timepicker.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/icomoon.css') }}">
-            <link rel="stylesheet" href="{{ asset('style/css/style.css') }}">
-
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
         {% endblock %}
     </head>
     <body>
+
     {{ render(controller(
         'App\\Controller\\NavbarController::navbarShow'
     )) }}
+    {% block bodySimple %}{% endblock %}
     <div class="container">
     <div class="row">
         <div class="col-md-12 text-center mb-5 site-animate">
@@ -39,6 +39,7 @@
         </div>
     </div>
     </div>
+
         {% block javascripts %}{% endblock %}
     </body>
 </html>

@@ -16,12 +16,14 @@ easy_admin:
                         - name
                         - price
                         - category
+                        - description
                         - { property: 'image', type: 'image', base_path: '%app.path.product_images%' }
                 form:
                   fields:
                     - name
                     - price
                     - category
+                    - description
                     - { property: 'imageFile', type: 'file' }
             Order:
                 class: App\Entity\Order
