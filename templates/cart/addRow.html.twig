@@ -7,7 +7,7 @@
 {% block header %}{{ dish.name }}{% endblock %}
 {% block body %}
     <span class="pl-2 article-details">
-        <span class="js-like-dish-count">5</span>
+        <span class="js-like-dish-count">{{ likes }}</span>
 
 <a href="{{ path('likeDish', {id: dish.id}) }}" class="fa fa-heart-o like-dish js-like-dish"></a>
 

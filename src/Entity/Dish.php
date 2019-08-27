@@ -61,12 +61,6 @@ class Dish
      */
     private $description;
 
-    /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    private $likes = 0;
-
-
     public function setImageFile(File $image = null)
     {
         $this->imageFile = $image;
@@ -144,15 +138,4 @@ class Dish
         return $this;
     }
 
-    public function getLikes(): ?int
-    {
-        return $this->likes;
-    }
-
-    public function setLikes(?int $likes): self
-    {
-        $this->likes = $likes;
-
-        return $this;
-    }
 }

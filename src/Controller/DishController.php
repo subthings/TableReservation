@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Dish;
+use App\Entity\Like;
 use App\Form\OrderRowType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,16 +31,22 @@ class DishController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $cartManager->addOrderRowToCart($cart, $orderRow);
 
             return $this->redirectToRoute('index');
         }
 
+        $likes = $this->getDoctrine()->getRepository(Like::class)->findBy([
+            'dish' => $dish,
+        ]);
+
+        $countLikes = count($likes);
+
         return $this->render('cart/addRow.html.twig', [
             'controller_name' => 'DishController',
             'form' => $form->createView(),
-            'dish' =>$dish,
+            'dish' => $dish,
+            'likes' => $countLikes,
         ]);
     }
 
@@ -50,9 +57,30 @@ class DishController extends AbstractController
     public function toggleDishLike($id): Response
     {
         $dish = $this->getDoctrine()->getRepository(Dish::class)->find($id);
-        $dish->setLikes($dish->getLikes()+1);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $like = $this->getDoctrine()->getRepository(Like::class)->findOneBy([
+            'user' => $user,
+            'dish' => $dish,
+        ]);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        if (isset($like)){
+           $entityManager->remove($like);
+        }
+        else {
+            $like->setUser($user);
+            $like->setDish($dish);
+            $entityManager->persist($like);
+        }
+        $entityManager->flush();
+
+        $likes = $this->getDoctrine()->getRepository(Like::class)->findBy([
+            'dish' => $dish,
+        ]);
+
+        $countLikes = count($likes);
 
 
-        return new JsonResponse(['likes' => 6]);
+        return new JsonResponse(['likes' => $countLikes]);
     }
 }
