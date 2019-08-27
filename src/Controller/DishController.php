@@ -68,6 +68,7 @@ class DishController extends AbstractController
            $entityManager->remove($like);
         }
         else {
+            $like = new Like();
             $like->setUser($user);
             $like->setDish($dish);
             $entityManager->persist($like);

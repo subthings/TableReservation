@@ -19,14 +19,14 @@ class Like
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $user;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Dish", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity="App\Entity\Dish", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $dish;
 
