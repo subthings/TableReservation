@@ -86,9 +86,21 @@ class OrderController extends AbstractController
                 'No order row found for id '.$id
             );
         }
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $cart = $this->getDoctrine()->getRepository(Cart::class)->findOneBy([
+            'user' => $user,
+            'isOrdered' => false,
+        ]);
+
+        if (count($cart->getOrderRows()) == 1){
+
+            $entityManager->remove($cart);
+        }
         $entityManager->remove($orderRow);
         $entityManager->flush();
-        return $this->render('cart/userCart.html.twig');
+        return $this->redirectToRoute('showCart',[
+            'id' =>$user->getId(),
+        ]);
     }
 
 
@@ -102,6 +114,7 @@ class OrderController extends AbstractController
         $carts = $this->getDoctrine()->getRepository(Cart::class)->findBy([
             'user' => $user,
         ]);
+
 
         return $this->render('order/list.html.twig', [
             'controller_name' => 'OrderTypeController',
@@ -127,7 +140,6 @@ class OrderController extends AbstractController
         }
         $em->flush();
         return $this->redirectToRoute('index');
-        //free table, payed order
     }
 
 

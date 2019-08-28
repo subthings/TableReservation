@@ -4,18 +4,33 @@
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 {% endblock %}
 {% block title %}Add to cart{% endblock %}
-{% block header %}{{ dish.name }}{% endblock %}
 {% block body %}
-    <span class="pl-2 article-details">
+    <section class="site-section" id="section-about">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 site-animate mb-5">
+                    <h2 class="site-primary-title display-4">{{ dish.name }}</h2>
+                    <p class="mb-4">{{ dish.description }}</p>
+
+                    <h4 class="site-sub-title">${{ dish.price }}</h4>
+                    <span class="pl-2 article-details">
         <span class="js-like-dish-count">{{ likes }}</span>
-
 <a href="{{ path('likeDish', {id: dish.id}) }}" class="fa fa-heart-o like-dish js-like-dish"></a>
+    </span>
 
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-6 site-animate img" data-animate-effect="fadeInRight">
+                    <img src="{{ vich_uploader_asset(dish, 'imageFile') }}" alt="Where?" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
 
     </span>
     {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn btn-success">{{ button_label|default('Add') }}</button>
+    <button class="btn btn-secondary btn-lg">{{ button_label|default('Add') }}</button>
     {{ form_end(form) }}
 
 
