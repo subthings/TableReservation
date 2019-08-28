@@ -27,11 +27,9 @@ class Like
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Dish")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Dish", inversedBy="likes")
      */
     private $dish;
-
 
     public function getId(): ?int
     {
@@ -61,6 +59,5 @@ class Like
 
         return $this;
     }
-
 
 }

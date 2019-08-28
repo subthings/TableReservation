@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Dish;
@@ -19,6 +19,19 @@ class LikeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Like::class);
     }
+
+    public function getLikedDishes($user):array
+    {
+        return $this->createQueryBuilder('l')
+            ->leftJoin('l.dish', 'd')
+            ->where('l.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+            ;
+
+    }
+
 
     // /**
     //  * @return Like[] Returns an array of Like objects

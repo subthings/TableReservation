@@ -6,6 +6,8 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Dish;
+use App\Entity\Like;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,14 +17,19 @@ class FrontController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index():Response
+    public function firstPageMenu(): Response
     {
-        $dishes = $this->getDoctrine()->getRepository(Dish::class)->findAll();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user instanceof User) {
+            $likedDishes = $this->getDoctrine()->getRepository(Dish::class)->getLikedDishes($user);
+            return $this->render('front/menuPage.html.twig', [
+                'likedDishes' => $likedDishes,
 
-        return $this->render('front/index.html.twig', [
-            'controller_name' => 'FrontController',
-            'dishes' => $dishes,
-        ]);
+            ]);
+        }
+        else {
+            return $this->render('front/index.html.twig');
+        }
     }
 
     /**
@@ -42,4 +49,7 @@ class FrontController extends AbstractController
             'dishes' => $dishes,
     ]);
     }
+
+
+
 }

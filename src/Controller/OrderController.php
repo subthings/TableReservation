@@ -68,9 +68,12 @@ class OrderController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }
-        return $this->render('order/list.html.twig', [
-            'user' => $user,
-            'notPayedOrders' => $notPayedOrders,
+        $this->addFlash(
+            'success',
+            'Your food\'ll be in 20 minutes!'
+        );
+        return $this->redirectToRoute('ordersList', [
+            'id' => $user->getId(),
         ]);
     }
 
@@ -98,6 +101,11 @@ class OrderController extends AbstractController
         }
         $entityManager->remove($orderRow);
         $entityManager->flush();
+
+        $this->addFlash(
+            'success',
+            'The dish has been deleted from your cart.'
+        );
         return $this->redirectToRoute('showCart',[
             'id' =>$user->getId(),
         ]);
@@ -107,7 +115,7 @@ class OrderController extends AbstractController
     /**
      * @Route("/orders/{id}", name="ordersList")
      */
-    public function index($id)
+    public function showOrders($id)
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed($user);

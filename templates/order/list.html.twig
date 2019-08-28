@@ -5,7 +5,7 @@
 {% block body %}
     <h3>Orders waiting to be payed: </h3>
 
-
+{% if notPayedOrders is not empty %}
     {% for order in notPayedOrders %}
 
 
@@ -18,26 +18,25 @@
                 <small class="text-muted">{{ order.time|date("m/d/Y h:m") }}</small>
                 <table class="table table-hover">
                     <tbody>
-            {% for row in order.cart.orderRows %}
-                <tr>
-                    <th scope="col">{{ row.dish }}</th>
-                    <td>{{ row.dish.price }}</td>
-                    <td>{{ row.quantity }}</td>
-                    <td>{{ row.dish.price*row.quantity }}</td>
-                </tr>
-            {% endfor %}
+                    {% for row in order.cart.orderRows %}
+                        <tr>
+                            <th scope="col">{{ row.dish }}</th>
+                            <td>{{ row.dish.price }}</td>
+                            <td>{{ row.quantity }}</td>
+                            <td>{{ row.dish.price*row.quantity }}</td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
         </a>
-        <h4>Total price: </h4>
+    {% endfor %}
+    <h4>Total price: </h4>
         <a type="submit" class="btn btn-warning" href="{{ path('pay', { id: user.id }) }}">Pay</a>
     {% else %}
         <h3>No order found</h3>
-        {% endfor %}
 
-    {#<h4>Total price: {{ totalSum }}</h4>#}
-
-
+{% endif %}
+    {# <h3>Previous orders: </h3> #}
 
 {% endblock %}

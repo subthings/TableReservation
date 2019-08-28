@@ -6,6 +6,8 @@ namespace App\Entity;
 
 use App\Entity\Traits\IdentityTrait;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
@@ -60,6 +62,16 @@ class Dish
      *
      */
     private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Like", mappedBy="dish")
+     */
+    private $likes;
+
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+    }
 
     public function setImageFile(File $image = null)
     {
@@ -134,6 +146,37 @@ class Dish
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Like[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setDish($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): self
+    {
+        if ($this->likes->contains($like)) {
+            $this->likes->removeElement($like);
+            // set the owning side to null (unless already changed)
+            if ($like->getDish() === $this) {
+                $like->setDish(null);
+            }
+        }
 
         return $this;
     }

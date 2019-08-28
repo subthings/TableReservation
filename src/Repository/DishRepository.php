@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Dish;
+use App\Entity\Like;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,18 +20,18 @@ class DishRepository extends ServiceEntityRepository
         parent::__construct($registry, Dish::class);
     }
 
-    /**
-     * @return Dish[]
-     */
-    public function showByCategories():array
+
+
+
+    public function getLikedDishes($user):array
     {
-        $qb = $this->createQueryBuilder('d')
-            ->addGroupBy('d.category')
-            ->getQuery();
-
-
-        return $qb->execute();
-
+        return $this->createQueryBuilder('dish')
+            ->leftJoin('dish.likes', 'likes')
+            ->andWhere('likes.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+            ;
     }
     // /**
     //  * @return Dish[] Returns an array of Dish objects
