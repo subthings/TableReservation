@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,16 +21,17 @@ class Like
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Dish", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Dish")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $dish;
+
 
     public function getId(): ?int
     {
@@ -40,7 +43,7 @@ class Like
         return $this->user;
     }
 
-    public function setUser(User $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
@@ -52,10 +55,12 @@ class Like
         return $this->dish;
     }
 
-    public function setDish(Dish $dish): self
+    public function setDish(?Dish $dish): self
     {
         $this->dish = $dish;
 
         return $this;
     }
+
+
 }
