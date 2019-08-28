@@ -22,8 +22,6 @@
                             <p>{{ dish.description }}</p>
                             <h6 class="text-primary menu-price">$ {{ dish.price }}  </h6>
                         </div>
-                        <p class="mb-0"><a href="{{ path('showDish', {id: dish.id}) }}"
-                                           class="btn btn-primary btn-sm">More</a></p>
                     </div>
                 {% endfor %}
 

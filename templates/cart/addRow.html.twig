@@ -17,6 +17,11 @@
         <span class="js-like-dish-count">{{ likes }}</span>
 <a href="{{ path('likeDish', {id: dish.id}) }}" class="fa fa-heart-o like-dish js-like-dish"></a>
     </span>
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <button class="btn btn-secondary btn-lg">{{ button_label|default('Add') }}</button>
+                    {{ form_end(form) }}
+
 
                 </div>
                 <div class="col-md-1"></div>
@@ -26,13 +31,6 @@
             </div>
         </div>
     </section>
-
-    </span>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-secondary btn-lg">{{ button_label|default('Add') }}</button>
-    {{ form_end(form) }}
-
 
 {% endblock %}
 

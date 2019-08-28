@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
-
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+{% endblock %}
 {% block title %}Hello CartController!{% endblock %}
 
 
@@ -12,6 +15,7 @@
             <th scope="col">Price</th>
             <th scope="col">Number</th>
             <th scope="col">Sum</th>
+            <th scope="col"></th>
             <th scope="col">Delete</th>
         </tr>
         </thead>
@@ -23,6 +27,11 @@
                 <td>{{ orderRow.dish.price }}</td>
                 <td>{{ orderRow.quantity }}</td>
                 <td>{{ orderRow.dish.price * orderRow.quantity }}</td>
+                <td>
+                        <a href="#">
+          <span class="glyphicon glyphicon-plus"></span>
+        </a>
+    </td>
                 <td><a type="submit" class="btn btn-danger" href="{{ path('orderRowDelete', { id: orderRow.id }) }}">Delete</a>
                 </td>
             </tr>

@@ -2,25 +2,22 @@
 
 {% block title %}Menu{% endblock %}
 {% block body %}
+
     <div class="jumbotron">
     <h1 class="display-3">Your favorite dishes</h1>
-    <div class="threeColumnContent" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 15px;">
+    <div class="threeColumnContent" style="display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 15px;">
     {% for dish in likedDishes %}
         <div class="card mb-3">
             <h3 class="card-header">{{ dish.name }}</h3>
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">{{ dish.category }}</h6>
-            </div>
             <img style="height: auto; width: 100%; display: block;" src="{{ vich_uploader_asset(dish, 'imageFile') }}" alt="Card image">
-            <div class="card-body">
+            <div class="card-body" style="display: flex; flex-direction: column; justify-content: space-evenly;">
                 <p class="card-text">{{ dish.description }}</p>
                 <p>${{ dish.price }}</p>
-            </div>
-            <div class="card-body">
                 <a href="{{ path('showDish', { id: dish.id } )}}" class="card-link">More</a>
             </div>
         </div>
     {% endfor %}
     </div>
     </div>
+
 {% endblock %}

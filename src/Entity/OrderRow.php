@@ -15,7 +15,7 @@ class OrderRow
     use IdentityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Dish", cascade="remove")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Dish")
      * @ORM\JoinColumn(name="dish_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $dish;
