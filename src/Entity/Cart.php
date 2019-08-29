@@ -57,7 +57,8 @@ class Cart
         return $this->orderRows;
     }
 
-    public function addOrderRow(OrderRow $orderRow): self
+    public function
+    addOrderRow(OrderRow $orderRow): self
     {
         if (!$this->orderRows->contains($orderRow)) {
             $this->orderRows[] = $orderRow;

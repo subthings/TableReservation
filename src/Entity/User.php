@@ -24,66 +24,42 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Cart", mappedBy="user", orphanRemoval=true)
      */
-    private $orders;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Cart", mappedBy="user", cascade={"persist", "remove"})
-     * @Assert\Unique
-     */
-    private $cart;
+    private $carts;
 
     public function __construct()
     {
         parent::__construct();
-        $this->orders = new ArrayCollection();
-        // your own logic
+        $this->carts = new ArrayCollection();
     }
+
 
     /**
      * @return Collection|Order[]
      */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(Order $order): self
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): self
-    {
-        if ($this->orders->contains($order)) {
-            $this->orders->removeElement($order);
-            // set the owning side to null (unless already changed)
-            if ($order->getUser() === $this) {
-                $order->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCart(): ?Cart
     {
-        return $this->cart;
+        return $this->carts;
     }
 
-    public function setCart(Cart $cart): self
+    public function addCart(Cart $cart): self
     {
-        $this->cart = $cart;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $cart->getUser()) {
+        if (!$this->carts->contains($cart)) {
+            $this->carts[] = $cart;
             $cart->setUser($this);
+        }
+
+return $this;
+    }
+
+    public function removeCarts(Cart $cart): self
+    {
+        if ($this->carts->contains($cart)) {
+            $this->carts->removeElement($cart);
+            if ($cart->getUser() === $this) {
+                $cart->setUser(null);
+            }
         }
 
         return $this;
