@@ -28,9 +28,6 @@
                 <td>{{ orderRow.quantity }}</td>
                 <td>{{ orderRow.dish.price * orderRow.quantity }}</td>
                 <td>
-                        <a href="#">
-          <span class="glyphicon glyphicon-plus"></span>
-        </a>
     </td>
                 <td><a type="submit" class="btn btn-danger" href="{{ path('orderRowDelete', { id: orderRow.id }) }}">Delete</a>
                 </td>

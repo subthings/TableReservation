@@ -64,7 +64,7 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/order/{id}/delete", name="orderRowDelete")
+     * @Route("/orderRow/{id}/delete", name="orderRowDelete")
      */
     public function deleteOrderRow($id, CartManager $cartManager): Response
     {

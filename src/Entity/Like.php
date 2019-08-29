@@ -28,6 +28,7 @@ class Like
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Dish", inversedBy="likes")
+     *  @ORM\JoinColumn(nullable=false)
      */
     private $dish;
 

@@ -24,7 +24,7 @@ class Category
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Dish", mappedBy="category", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Dish", mappedBy="category")
      */
     private $dishes;
 
