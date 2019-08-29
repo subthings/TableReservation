@@ -31,7 +31,7 @@ services:
     nginx:
         build: docker/nginx/
         ports:
-            - 8888:80
+            - 80:80
         restart: always
         volumes_from:
             - php
