@@ -13,5 +13,6 @@ vendor/*
 !bin/symfony_requirements
 /vendor/
 
+.env.local/
 config/parameters.yml
 config/parameters.ini
