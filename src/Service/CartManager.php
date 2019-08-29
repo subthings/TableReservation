@@ -71,4 +71,20 @@ class CartManager
         return $cart;
     }
 
+    public function deleteOrderRow($id, User $user, OrderRow $orderRow){
+        $cart = $this->entityManager->getRepository(Cart::class)->findOneBy([
+            'user' => $user,
+            'isOrdered' => false,
+        ]);
+
+        if (count($cart->getOrderRows()) == 1){
+
+            $this->entityManager->remove($cart);
+        }
+        $this->entityManager->remove($orderRow);
+        $this->entityManager->flush();
+
+
+    }
+
 }

@@ -50,7 +50,8 @@ class Order
 
     public function __construct()
     {
-        $this->time = new \DateTime();
+        $this->time = new \DateTime('+7 hours');
+            date_default_timezone_set("Europe/Moscow");
     }
 
     public function getUser(): ?User

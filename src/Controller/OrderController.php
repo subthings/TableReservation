@@ -9,8 +9,9 @@ use App\Entity\OrderRow;
 use App\Entity\Table;
 use App\Entity\User;
 use App\Form\OrderType;
+use App\Service\CartManager;
+use App\Service\OrderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,7 +21,7 @@ class OrderController extends AbstractController
     /**
      * @Route("/order/{id}", name="order")
      */
-    public function makeOrder(Request $request, $id): Response
+    public function makeOrder(Request $request, $id, OrderManager $orderManager): Response
     {
         $cart = $this->getDoctrine()->getRepository(Cart::class)->find($id);
         $cart->setIsOrdered(true);
@@ -32,16 +33,7 @@ class OrderController extends AbstractController
 
         $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed($user);
         if ($notPayedOrders) {
-            $table = $notPayedOrders[0]->getReservedTable();
-            $personNumber = $notPayedOrders[0]->getPersonNumber();
-
-            $order->setReservedTable($table);
-            $order->setPersonNumber($personNumber);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($order);
-            $entityManager->flush();
-
+            $orderManager->addOrderToExistTable($order, $notPayedOrders);
         } else {
             $form = $this->createForm(OrderType::class, $order);
             $form->handleRequest($request);
@@ -54,14 +46,8 @@ class OrderController extends AbstractController
                         'personNumber' => $order->getPersonNumber(),
                     ]);
                 }
-                $table->setIsFree(false);
-                $order->setReservedTable($table);
+                $orderManager->addOrderToNewTable($table, $order);
 
-
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($table);
-                $entityManager->persist($order);
-                $entityManager->flush();
                 return $this->redirectToRoute('index');
             }
             return $this->render('cart/order.html.twig', [
@@ -80,27 +66,18 @@ class OrderController extends AbstractController
     /**
      * @Route("/order/{id}/delete", name="orderRowDelete")
      */
-    public function deleteOrderRow($id): Response
+    public function deleteOrderRow($id, CartManager $cartManager): Response
     {
+
         $orderRow = $this->getDoctrine()->getRepository(OrderRow::class)->find($id);
-        $entityManager = $this->getDoctrine()->getManager();
+
         if (!$orderRow) {
             throw $this->createNotFoundException(
                 'No order row found for id '.$id
             );
         }
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $cart = $this->getDoctrine()->getRepository(Cart::class)->findOneBy([
-            'user' => $user,
-            'isOrdered' => false,
-        ]);
-
-        if (count($cart->getOrderRows()) == 1){
-
-            $entityManager->remove($cart);
-        }
-        $entityManager->remove($orderRow);
-        $entityManager->flush();
+        $cartManager->deleteOrderRow($id, $user, $orderRow);
 
         $this->addFlash(
             'success',
@@ -109,19 +86,17 @@ class OrderController extends AbstractController
         return $this->redirectToRoute('showCart',[
             'id' =>$user->getId(),
         ]);
+
     }
 
 
     /**
      * @Route("/orders/{id}", name="ordersList")
      */
-    public function showOrders($id)
+    public function showOrders($id): Response
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed($user);
-        $carts = $this->getDoctrine()->getRepository(Cart::class)->findBy([
-            'user' => $user,
-        ]);
 
 
         return $this->render('order/list.html.twig', [
@@ -134,38 +109,10 @@ class OrderController extends AbstractController
     /**
      * @Route("/orders/{id}/pay", name="pay")
      */
-    public function pay($id): Response
+    public function pay($id, OrderManager $orderManager): Response
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
-        $notPayedOrders = $this->getDoctrine()->getRepository(Order::class)->findNotPayed($user);
-        $em = $this->getDoctrine()->getManager();
-        foreach ($notPayedOrders as $order){
-            $order->setPayed(true);
-            $table = $order->getReservedTable();
-            $table->setIsFree(true);
-            $em->persist($order);
-            $em->persist($table);
-        }
-        $em->flush();
+        $orderManager->pay($id);
         return $this->redirectToRoute('index');
     }
 
-
-    /**
-     * @param $name
-     * @param \Swift_Mailer $mailer
-     * @return Response
-     * @Route("/send", name="send")
-     */
-    public function swiftMailer( \Swift_Mailer $mailer): Response
-    {
-        $message = (new \Swift_Message('Hello Email'))
-            ->setFrom('reservationmailer25@gmail.com')
-            ->setTo('reservationmailer25@gmail.com')
-            ->setBody('You should see me from the profiler!');
-
-        $mailer->send($message);
-
-        return $this->render('front/index.html.twig');
-    }
 }

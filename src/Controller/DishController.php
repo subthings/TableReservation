@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Dish;
 use App\Entity\Like;
 use App\Form\OrderRowType;
+use App\Service\LikeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,34 +55,12 @@ class DishController extends AbstractController
     /**
      * @Route("/show/{id}/like", name="likeDish", methods={"POST"})
      */
-    public function toggleDishLike($id): Response
+    public function toggleDishLike($id, LikeManager $likeManager): Response
     {
-        $dish = $this->getDoctrine()->getRepository(Dish::class)->find($id);
+
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $like = $this->getDoctrine()->getRepository(Like::class)->findOneBy([
-            'user' => $user,
-            'dish' => $dish,
-        ]);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        if (isset($like)){
-           $entityManager->remove($like);
-        }
-        else {
-            $like = new Like();
-            $like->setUser($user);
-            $like->setDish($dish);
-            $entityManager->persist($like);
-        }
-        $entityManager->flush();
-
-        $likes = $this->getDoctrine()->getRepository(Like::class)->findBy([
-            'dish' => $dish,
-        ]);
-
-        $countLikes = count($likes);
-
-
-        return new JsonResponse(['likes' => $countLikes]);
+        $likes = $likeManager->pressLike($id, $user);
+        return new JsonResponse(['likes' => count($likes)]);
     }
 }

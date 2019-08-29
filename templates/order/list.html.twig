@@ -15,7 +15,7 @@
 
                 <h5 class="mb-1">Table number {{ order.reservedTable.id }}</h5>
 
-                <small class="text-muted">{{ order.time|date("m/d/Y h:m") }}</small>
+                <small class="text-muted">{{ order.time|date("d/m/Y h:i") }}</small>
                 <table class="table table-hover">
                     <tbody>
                     {% for row in order.cart.orderRows %}

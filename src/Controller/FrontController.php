@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Dish;
-use App\Entity\Like;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
