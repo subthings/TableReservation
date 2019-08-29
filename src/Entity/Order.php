@@ -28,10 +28,6 @@ class Order
      */
     private $payed = false;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bill", inversedBy="orders")
-     */
-    private $bill;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Table")
@@ -59,6 +55,7 @@ class Order
         return $this->cart->user;
     }
 
+
     public function getCart(): Cart
     {
         return $this->cart;
@@ -83,17 +80,6 @@ class Order
         return $this;
     }
 
-    public function getBill(): ?Bill
-    {
-        return $this->bill;
-    }
-
-    public function setBill(?Bill $bill): self
-    {
-        $this->bill = $bill;
-
-        return $this;
-    }
 
     public function getReservedTable(): ?Table
     {

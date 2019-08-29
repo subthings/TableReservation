@@ -34,16 +34,10 @@ class User extends BaseUser
      */
     private $cart;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Bill", mappedBy="user")
-     */
-    private $bills;
-
     public function __construct()
     {
         parent::__construct();
         $this->orders = new ArrayCollection();
-        $this->bills = new ArrayCollection();
         // your own logic
     }
 
@@ -95,34 +89,4 @@ class User extends BaseUser
         return $this;
     }
 
-    /**
-     * @return Collection|Bill[]
-     */
-    public function getBills(): Collection
-    {
-        return $this->bills;
-    }
-
-    public function addBill(Bill $bill): self
-    {
-        if (!$this->bills->contains($bill)) {
-            $this->bills[] = $bill;
-            $bill->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBill(Bill $bill): self
-    {
-        if ($this->bills->contains($bill)) {
-            $this->bills->removeElement($bill);
-            // set the owning side to null (unless already changed)
-            if ($bill->getUser() === $this) {
-                $bill->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 }
