@@ -15,7 +15,6 @@
             <th scope="col">Price</th>
             <th scope="col">Number</th>
             <th scope="col">Sum</th>
-            <th scope="col"></th>
             <th scope="col">Delete</th>
         </tr>
         </thead>
@@ -23,12 +22,10 @@
 
         {% for orderRow in orderRows %}
             <tr>
-                <th scope="col">{{ orderRow.dish }}</th>
+                <th scope="col"><a href="{{ path('showDish', {id: orderRow.dish.id}) }}">{{ orderRow.dish }}</a></th>
                 <td>{{ orderRow.dish.price }}</td>
                 <td>{{ orderRow.quantity }}</td>
                 <td>{{ orderRow.dish.price * orderRow.quantity }}</td>
-                <td>
-    </td>
                 <td><a type="submit" class="btn btn-danger" href="{{ path('orderRowDelete', { id: orderRow.id }) }}">Delete</a>
                 </td>
             </tr>
