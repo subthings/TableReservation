@@ -17,7 +17,7 @@ class Cart
     use IdentityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="carts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;

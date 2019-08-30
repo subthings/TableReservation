@@ -30,7 +30,18 @@ class CartManager
         $this->cart = $entityManager->getRepository(Cart::class);
     }
 
+    private function findOrderRowIfExists(Cart $cart, Dish $dish){
+        $orderRows = $cart->getOrderRows();
+        foreach ($orderRows as $orderRow){
+            if ($orderRow->getDish() === $dish){
+                return $orderRow;
+            }
+        }
+        return null;
+    }
+
     public function returnOrderRow(Cart $cart, Dish $dish){
+        $orderRow = $this->findOrderRowIfExists($cart, $dish);
         if (!isset($orderRow)) {
             $orderRow = new OrderRow();
             $orderRow->setDish($dish);
